@@ -19,7 +19,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.searchBox}>
-      <Text style={styles.title}>Cocktails</Text>
+      <Text style={styles.heading}>Cocktails</Text>
       <TextInput
         style={styles.field}
         placeholder='Search for a cocktail'
