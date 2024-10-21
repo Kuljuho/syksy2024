@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Belly Buddy</string>
+
+    <string name="backk">Takaisin</string>
+    <string name="refresh_recipes">Päivitä reseptit</string>
+    <string name="info">Tietoa</string>
+    <string name="recipes">Reseptit</string>
+
+    <string name="search_recipes">Hae reseptejä</string>
+    <string name="search">Hae</string>
+
+    <string name="ingredients">Ainesosat:</string>
+    <string name="instructions">Ohjeet:</string>
+    <string name="rate_recipe">Arvostele resepti:</string>
+    <string name="current_rating">Nykyinen arvostelu: %1$.1f</string>
+
+    <string name="about_app">Tietoa sovelluksesta</string>
+    <string name="app_description">Tämä sovellus tarjoaa satunnaisia reseptejä Spoonacular API:n avulla. Sovelluksen on kehittänyt Juho Kultala (Kuljuho @github).</string>
+
+</resources>
