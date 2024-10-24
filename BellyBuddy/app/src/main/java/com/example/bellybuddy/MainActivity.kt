@@ -3,14 +3,9 @@ package com.example.bellybuddy
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,11 +23,13 @@ class MainActivity : ComponentActivity() {
             BellyBuddyTheme {
                 val navController = rememberNavController()
                 val viewModel: RecipeViewModel = viewModel()
-                val apiKey = 
+                val apiKey = "ff5f49f68b9844a4bf9c90efa349012e"
 
                 NavHost(navController = navController, startDestination = "recipe_list") {
                     composable("recipe_list") {
-                        viewModel.getRecipes(apiKey)
+                        LaunchedEffect(Unit) {
+                            viewModel.getRecipes(apiKey)
+                        }
                         RecipeListScreen(
                             viewModel,
                             onRecipeClick = { recipe ->

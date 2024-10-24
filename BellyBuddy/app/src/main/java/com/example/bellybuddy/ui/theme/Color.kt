@@ -2,10 +2,28 @@ package com.example.bellybuddy.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val NeutralPrimary = Color(0xFFF5F5F5)
+val NeutralPrimaryVariant = Color(0xFF9E9E9E)
+val NeutralSecondary = Color(0xFFD7CCC8)
+val NeutralSecondaryVariant = Color(0xFFBCAAA4)
+val LightBackground = Color(0xFFF5F5F5)
+val LightSurface = Color(0xFFFFFFFF)
+val ErrorRed = Color(0xFFD32F2F)
+val OnPrimary = Color.Black
+val OnSecondary = Color.Black
+val OnBackground = Color.Black
+val OnSurface = Color.Black
+val OnError = Color.White
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val DarkPrimary = Color(0xFF424242)
+val DarkPrimaryVariant = Color(0xFF212121)
+val DarkSecondary = Color(0xFF616161)
+val DarkSecondaryVariant = Color(0xFF757575)
+val DarkBackground = Color(0xFF303030)
+val DarkSurface = Color(0xFF424242)
+val DarkError = Color(0xFFCF6679)
+val DarkOnPrimary = Color.White
+val DarkOnSecondary = Color.White
+val DarkOnBackground = Color.White
+val DarkOnSurface = Color.White
+val DarkOnError = Color.Black

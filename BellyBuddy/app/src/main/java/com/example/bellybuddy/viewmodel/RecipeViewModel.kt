@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bellybuddy.network.RetrofitInstance
 import com.example.bellybuddy.model.Recipe
-import com.example.bellybuddy.model.RecipeSearchResponse
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +39,10 @@ class RecipeViewModel : ViewModel() {
 
     fun refreshRecipes(apiKey: String) {
         getRecipes(apiKey)
+    }
+
+    fun clearSearchResults() {
+        _searchResults.value = emptyList()
     }
 
     private fun parseErrorMessage(errorBody: String?): String {

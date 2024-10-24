@@ -1,7 +1,7 @@
 package com.example.bellybuddy.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,12 +14,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.rememberAsyncImagePainter
 import com.example.bellybuddy.R
 import com.example.bellybuddy.model.Recipe
@@ -39,81 +41,154 @@ fun RecipeListScreen(
     val errorMessage by viewModel.errorMessage.collectAsState()
 
     var searchQuery by remember { mutableStateOf("") }
+    var isSearchBarVisible by remember { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.recipes)) },
-                actions = {
-                    IconButton(onClick = { viewModel.refreshRecipes(apiKey) }) {
-                        Icon(
-                            Icons.Default.Refresh,
-                            contentDescription = stringResource(R.string.refresh_recipes)
-                        )
-                    }
-                    IconButton(onClick = onInfoClick) {
-                        Icon(
-                            Icons.Default.Info,
-                            contentDescription = stringResource(R.string.info)
-                        )
-                    }
-                }
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.primary)
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .height(20.dp)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.primary)
             )
-        }
-    ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
 
-            OutlinedTextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                label = { Text(stringResource(R.string.search_recipes)) },
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
-                singleLine = true,
-                trailingIcon = {
-                    IconButton(onClick = {
-                        if (searchQuery.isNotBlank()) {
-                            viewModel.searchRecipes(apiKey, searchQuery)
-                        }
-                    }) {
-                        Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search))
-                    }
-                },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Search
-                ),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        if (searchQuery.isNotBlank()) {
-                            viewModel.searchRecipes(apiKey, searchQuery)
-                        }
-                    }
+                    .background(MaterialTheme.colorScheme.primary)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.bellybuddy),
+                    contentDescription = stringResource(R.string.app_name),
+                    modifier = Modifier
+                        .height(80.dp)
+                        .align(Alignment.Center)
                 )
+            }
+
+            Spacer(
+                modifier = Modifier
+                    .height(15.dp)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.primary)
             )
 
-            Box(modifier = Modifier.fillMaxSize()) {
-                when {
-                    isLoading -> {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                    }
-                    errorMessage != null -> {
-                        Text(
-                            text = errorMessage ?: "",
-                            color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                    else -> {
-                        val displayRecipes = if (searchResults.isNotEmpty()) searchResults else recipes
-                        LazyColumn {
-                            items(displayRecipes) { recipe ->
-                                RecipeItem(recipe, onClick = { onRecipeClick(recipe) })
+            Scaffold(
+                containerColor = Color.Transparent,
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = stringResource(R.string.recipes),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent,
+                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        actions = {
+                            IconButton(onClick = {
+                                viewModel.clearSearchResults()
+                                viewModel.refreshRecipes(apiKey)
+                            }) {
+                                Icon(
+                                    Icons.Default.Refresh,
+                                    contentDescription = stringResource(R.string.refresh_recipes)
+                                )
+                            }
+                            IconButton(onClick = onInfoClick) {
+                                Icon(
+                                    Icons.Default.Info,
+                                    contentDescription = stringResource(R.string.info)
+                                )
+                            }
+                            IconButton(onClick = { isSearchBarVisible = !isSearchBarVisible }) {
+                                Icon(
+                                    Icons.Default.Search,
+                                    contentDescription = stringResource(R.string.search)
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.primary)
+                    )
+                },
+                content = { innerPadding ->
+                    Column(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background)
+                    ) {
+                        if (isSearchBarVisible) {
+                            OutlinedTextField(
+                                value = searchQuery,
+                                onValueChange = { searchQuery = it },
+                                label = { Text(stringResource(R.string.search_recipes)) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                                    .background(MaterialTheme.colorScheme.surface), // Asetetaan taustaväri
+                                singleLine = true,
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Search
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onSearch = {
+                                        if (searchQuery.isNotBlank()) {
+                                            viewModel.searchRecipes(apiKey, searchQuery)
+                                        }
+                                    }
+                                ),
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    cursorColor = MaterialTheme.colorScheme.primary,
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    containerColor = MaterialTheme.colorScheme.surface // Asetetaan taustaväri
+                                ),
+                                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            )
+                        }
+
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            when {
+                                isLoading -> {
+                                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                                }
+                                errorMessage != null -> {
+                                    Text(
+                                        text = errorMessage ?: "",
+                                        color = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
+                                else -> {
+                                    val displayRecipes = if (searchResults.isNotEmpty()) searchResults else recipes
+                                    LazyColumn {
+                                        items(displayRecipes) { recipe ->
+                                            RecipeItem(recipe, onClick = { onRecipeClick(recipe) })
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
+            )
         }
     }
 }
@@ -126,7 +201,12 @@ fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
             .padding(8.dp)
             .clickable { onClick() }
     ) {
-        Row(modifier = Modifier.height(100.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
             Image(
                 painter = rememberAsyncImagePainter(recipe.image),
                 contentDescription = recipe.title,
@@ -140,7 +220,8 @@ fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .padding(8.dp)
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically),
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
