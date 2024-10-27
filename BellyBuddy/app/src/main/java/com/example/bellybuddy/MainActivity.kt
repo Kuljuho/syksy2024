@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             BellyBuddyTheme {
                 val navController = rememberNavController()
                 val viewModel: RecipeViewModel = viewModel()
-                val apiKey = 
+                val apiKey = "ff5f49f68b9844a4bf9c90efa349012e"
 
                 NavHost(navController = navController, startDestination = "recipe_list") {
                     composable("recipe_list") {
